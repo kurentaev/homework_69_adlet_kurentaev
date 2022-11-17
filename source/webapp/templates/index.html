@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW69</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+            crossorigin="anonymous"></script>
+</head>
+<body style="background: #ffc107;">
+<div class="container" style="margin-top: 80px; ">
+    <div class="card" style="width: 200px">
+        <form id="numbers" method="post">
+            <span>Input first number:</span>
+            <input class="form-control" id="A">
+            <span>Input second number:</span>
+            <input class="form-control" id="B">
+            <button class="btn btn-secondary" type="submit" id="add" data-name="add">+</button>
+            <button class="btn btn-secondary" type="submit" id="subtract" data-name="subtract">-</button>
+            <button class="btn btn-secondary" type="submit" id="multiply" data-name="multiply">*</button>
+            <button class="btn btn-secondary" type="submit" id="divide" data-name="divide">/</button>
+        </form>
+    </div>
+    <div class="card" style="width: 200px">
+        <div class="card-body">
+            <h5 id="answer"></h5>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#add').click(calculator)
+        $('#subtract').click(calculator)
+        $('#multiply').click(calculator)
+        $('#divide').click(calculator)
+
+        function calculator(event) {
+            event.preventDefault()
+            let answer = {
+                A: document.getElementById('A').value,
+                B: document.getElementById('B').value
+            }
+            $.ajax({
+                url: `http://localhost:8000/api/${$(this).attr('data-name')}/`,
+                method: 'POST',
+                data: JSON.stringify(answer),
+                success: function(data) {
+                    $('#answer').html(`<span style="background-color: green">${data.answer}</span>`)
+                },
+                error: function(data) {
+                    $('#answer').html(`<span style="background-color: red">${data.responseJSON.error}</span>`)
+                }
+            });
+        }
+    })
+</script>
+</body>
+</html>

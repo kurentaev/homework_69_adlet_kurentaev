@@ -23,7 +23,7 @@ def calculator(request, operation):
                         answer = float(answer['A']) - float(answer['B'])
                     elif operation == 'multiply':
                         answer = float(answer['A']) * float(answer['B'])
-                    if operation == 'divide' and answer['B'] != 0:
+                    elif operation == 'divide' and answer['B'] != 0:
                         answer = float(answer['A']) / float(answer['B'])
                     return JsonResponse({'answer': float(answer)}, safe=False)
                 response = JsonResponse({'error': 'Value error!'})
@@ -37,13 +37,6 @@ def calculator(request, operation):
             response = JsonResponse({'error': 'No data provided!'})
             response.status_code = 400
             return response
-
-
-@ensure_csrf_cookie
-def get_token_view(request, *args, **kwargs):
-    if request.method == 'GET':
-        return HttpResponse()
-    return HttpResponseNotAllowed('Only GET request are allowed')
 
 
 @csrf_exempt
@@ -64,3 +57,10 @@ def multiply_view(request, *args, **kwargs):
 @csrf_exempt
 def divide_view(request, *args, **kwargs):
     return calculator(request, 'divide')
+
+
+@ensure_csrf_cookie
+def get_token_view(request, *args, **kwargs):
+    if request.method == 'GET':
+        return HttpResponse()
+    return HttpResponseNotAllowed('Only GET request are allowed')
